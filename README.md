@@ -98,7 +98,11 @@ This helps reduce hallucination and keeps the answers grounded in the uploaded d
                     │  Final Answer    │
                     │   to the User    │
                     └──────────────────┘
-✨ Features
+
+---
+
+
+# ✨ Features
 📄 Upload PDF documents through a web interface
 🔎 Ask natural-language questions about the uploaded PDF
 🧠 Retrieval-Augmented Generation architecture
@@ -112,6 +116,8 @@ This helps reduce hallucination and keeps the answers grounded in the uploaded d
 🛡️ Answers are instructed to remain grounded in the document
 🌐 Streamlit-based web interface
 ☁️ Deployed online using Streamlit Community Cloud
+
+---
 🛠️ Technologies Used
 1. Python
 
