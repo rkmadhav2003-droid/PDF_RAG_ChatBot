@@ -1,11 +1,15 @@
 from langchain_ollama import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import SystemMessage , HumanMessage, AIMessage
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # loading llm to the pipeline.
-llm = ChatOllama(model="llama3.2")
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.6-flash",
+    temperature=0
+)
 
 
 def ask_question(user_question,db,chat_history):
@@ -45,7 +49,16 @@ def ask_question(user_question,db,chat_history):
 
         result = llm.invoke(rewrite_message)
 
-        search_question = result.content.strip()
+        content = result.content
+
+        if isinstance(content, list):
+            search_question = "".join(
+                block.get("text", "")
+                for block in content
+                if isinstance(block, dict)
+            ).strip()
+        else:
+            search_question = content.strip()
 
         print(f"Searching for: {search_question}")
         
@@ -129,7 +142,14 @@ def ask_question(user_question,db,chat_history):
         ]
 
     result = llm.invoke(answer_message)
-    answer = result.content
+    if isinstance(result.content, list):
+        answer = "".join(
+            block.get("text", "")
+            for block in result.content
+            if isinstance(block, dict) and block.get("type") == "text"
+        )
+    else:
+        answer = result.content
     
     
     #Step 4: Remember Conversations

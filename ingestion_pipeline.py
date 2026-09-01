@@ -1,7 +1,7 @@
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -39,8 +39,8 @@ def splitting_chunks(docs):
 
 #Storing to Chroma DB
 def store_chroma(chunks):
-    embedding_model = OllamaEmbeddings(
-        model="nomic-embed-text"
+    embedding_model = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
     persistant_directory = "db/vectore"
 

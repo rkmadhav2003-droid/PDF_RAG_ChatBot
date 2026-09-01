@@ -10,3 +10,4 @@ db/
 doc/
 
 .vscode/
+.agents/
