@@ -98,11 +98,12 @@ This helps reduce hallucination and keeps the answers grounded in the uploaded d
                     │  Final Answer    │
                     │   to the User    │
                     └──────────────────┘
-
+```
 ---
 
 
 # ✨ Features
+
 📄 Upload PDF documents through a web interface
 🔎 Ask natural-language questions about the uploaded PDF
 🧠 Retrieval-Augmented Generation architecture
@@ -118,7 +119,8 @@ This helps reduce hallucination and keeps the answers grounded in the uploaded d
 ☁️ Deployed online using Streamlit Community Cloud
 
 ---
-🛠️ Technologies Used
+
+## 🛠️ Technologies Used
 1. Python
 
 Python is the primary programming language used to build the complete RAG pipeline.
@@ -133,6 +135,7 @@ Retrieval
 LLM interaction
 Conversation management
 Streamlit application development
+
 2. Streamlit
 
 Streamlit is used to create the web interface for the application.
@@ -170,6 +173,7 @@ langchain-chroma
 langchain-huggingface
 langchain-google-genai
 langchain-text-splitters
+
 📄 4. PyMuPDFLoader
 
 The project uses:
@@ -177,9 +181,7 @@ The project uses:
 from langchain_community.document_loaders import PyMuPDFLoader
 
 PyMuPDFLoader is responsible for loading and extracting text from PDF files.
-
 The extracted content is represented as LangChain Document objects.
-
 Each document also contains metadata such as page information.
 
 ✂️ 5. RecursiveCharacterTextSplitter
@@ -203,7 +205,7 @@ RecursiveCharacterTextSplitter attempts to split the content using increasingly 
 The overlap helps prevent important information from being lost between two consecutive chunks.
 
 Example:
-
+```
 Chunk 1
 --------------------------------
 ...information about machine
@@ -215,7 +217,7 @@ Chunk 2
 ...artificial intelligence
 and neural networks...
 --------------------------------
-
+```
 The overlap provides some shared context between chunks.
 
 🔢 6. Hugging Face Embeddings
@@ -229,13 +231,13 @@ HuggingFaceEmbeddings(
 The embedding model converts text into numerical vectors.
 
 For example:
-
+```
 "Python is a programming language"
                  ↓
           Embedding Model
                  ↓
        [0.12, -0.45, 0.78, ...]
-
+```
 These vectors allow the system to compare the semantic similarity between the user's question and document chunks.
 
 Embedding Model
@@ -262,11 +264,11 @@ When the user asks a question, the system searches the vector database for docum
 🔍 8. Retrieval
 
 The vector database is converted into a LangChain retriever:
-
+```
 retriever = db.as_retriever(
     search_kwargs={"k": 10}
 )
-
+```
 The system retrieves the top 10 relevant document chunks.
 
 These retrieved documents become the context provided to the LLM.
@@ -282,7 +284,7 @@ Query Rewriting
 When conversation history exists, the system rewrites the latest user question into a standalone search query.
 
 For example:
-
+```
 User:
 What is his CGPA?
 
@@ -296,7 +298,7 @@ Query Rewriting
           ↓
 
 What is Madhav's CGPA?
-
+```
 This improves retrieval for follow-up questions.
 
 Answer Generation
@@ -324,7 +326,7 @@ SystemMessage
 The history allows the chatbot to understand follow-up questions.
 
 For example:
-
+```
 User:
 What projects has Madhav worked on?
 
@@ -333,7 +335,7 @@ He has worked on ...
 
 User:
 Which technologies were used in the first one?
-
+```
 The second question depends on the previous conversation.
 
 The system uses previous user questions during query rewriting to resolve references.
@@ -345,13 +347,13 @@ One of the important concepts implemented in this project is query rewriting.
 Instead of directly sending every user question to the vector database, the system checks whether conversation history exists.
 
 If history exists, previous human messages are extracted:
-
+```
 previous_questions = [
     message
     for message in chat_history
     if isinstance(message, HumanMessage)
 ]
-
+```
 This ensures that the query rewriting component primarily receives previous user questions.
 
 The latest question is then rewritten into a standalone search query.
@@ -390,7 +392,8 @@ State when the document does not contain enough information
 
 This separation makes the RAG pipeline easier to understand and control.
 
-🧩 Project Structure
+## 🧩 Project Structure
+```
 PDF_RAG_ChatBot/
 │
 ├── app.py
@@ -409,7 +412,7 @@ PDF_RAG_ChatBot/
 │
 └── README.md
 app.py
-
+```
 Main Streamlit application.
 
 Responsible for:
@@ -456,7 +459,7 @@ test_pdf_loaders.py
 
 Used during development to test PDF loading behavior and compare/inspect PDF extraction.
 
-🔄 Complete RAG Workflow
+## 🔄 Complete RAG Workflow
 
 The complete application can be summarized into two major pipelines.
 
@@ -512,7 +515,7 @@ Madhav's CGPA is 6.86.
 
 The model is instructed not to rely on information outside the retrieved document.
 
-📦 Python Packages Used
+## 📦 Python Packages Used
 
 The major packages used in this project include:
 
@@ -538,7 +541,7 @@ uuid
 
 These do not need to be installed separately using pip.
 
-🔑 Environment Variables
+## 🔑 Environment Variables
 
 The Google Gemini API key is stored securely using environment variables.
 
@@ -552,13 +555,13 @@ For deployment, the API key is stored using Streamlit Secrets instead of exposin
 
 Never commit API keys, passwords, or other credentials to GitHub.
 
-☁️ Deployment
+## ☁️ Deployment
 
 The application is deployed using:
 
 Streamlit Community Cloud
 
-Live application:
+## Live application:
 
 👉 https://pdfragchatbot-ifu4ihvxwaxa4dskmwdixc.streamlit.app/
 
@@ -579,6 +582,7 @@ Configure Secrets
 Run app.py
        ↓
 Live Web Application
+
 🔒 Git & GitHub
 
 Git is used for version control and GitHub is used to host the source code.
@@ -598,7 +602,8 @@ __pycache__/
 
 This keeps the repository clean and prevents sensitive configuration files and local-generated databases from being committed.
 
-⚡ Design Decisions
+## ⚡ Design Decisions
+
 Why RAG?
 
 A normal LLM may not know the contents of a user's private PDF.
@@ -666,7 +671,9 @@ The second question is not completely standalone.
 
 Query rewriting transforms it into a more useful retrieval query while using previous user questions to resolve references.
 
-🛡️ Hallucination Reduction
+--- 
+
+## 🛡️ Hallucination Reduction
 
 The system does not claim that RAG completely eliminates hallucination.
 
@@ -698,7 +705,8 @@ Very large documents may require additional optimization.
 The application currently uses a relatively simple retrieval strategy.
 Conversation history is maintained within the Streamlit session.
 The application is not designed as a production-scale multi-user document platform.
-🚀 Future Improvements
+ 
+##🚀 Future Improvements
 
 Possible future improvements include:
 
@@ -752,7 +760,9 @@ Pinecone
 Qdrant
 Weaviate
 PostgreSQL + pgvector
-📚 Concepts Learned
+
+---
+## 📚 Concepts Learned
 
 This project helped demonstrate several important concepts in modern AI application development:
 
@@ -777,7 +787,10 @@ API key management
 Git
 GitHub
 Cloud deployment
-🎯 What This Project Demonstrates
+
+---
+
+## 🎯 What This Project Demonstrates
 
 This project is more than a simple chatbot. It demonstrates how different components of an AI application can be connected into a complete pipeline:
 
@@ -807,7 +820,9 @@ Cloud Deployment
 
 The main objective was to understand the fundamentals of building an end-to-end RAG application rather than simply calling an LLM API.
 
-👨‍💻 Author
+---
+
+## 👨‍💻 Author
 
 Madhav R Krishnan
 
@@ -817,6 +832,9 @@ Connect with me
 🌐 Portfolio: https://portfolio-nine-ochre-50.vercel.app/
 💼 LinkedIn: https://www.linkedin.com/in/madhavrk03
 🐙 GitHub: https://github.com/rkmadhav2003-droid
+
+---
+
 ⭐ If You Found This Project Useful
 
 Feel free to explore the repository, try the live application, and provide feedback.
