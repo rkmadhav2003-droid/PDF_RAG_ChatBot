@@ -2,9 +2,8 @@ import streamlit as st
 import tempfile
 from ingestion_pipeline import load_doc, splitting_chunks, store_chroma
 from retrieval_pipeline import ask_question
-import shutil
+import uuid
 import os
-import gc
 
 st.title(" PDF RAG Chatbot")
 
@@ -21,7 +20,8 @@ st.title(" PDF RAG Chatbot")
 #         shutil.rmtree("db/vectore")
 
 #     st.rerun()
-    
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())   
 
 if "db" not in st.session_state:
     st.session_state.db = None
@@ -46,8 +46,15 @@ if uploaded_file:
          
         documents = load_doc(pdf_path)
         chunks = splitting_chunks(documents)
-        db = store_chroma(chunks)
+        
+        persist_directory = os.path.join(
+            "db",
+            st.session_state.session_id)
+        
+        db = store_chroma(chunks,persist_directory)
+        
         st.session_state.db = db
+        
         st.success("PDF processed successfully!")
     
     

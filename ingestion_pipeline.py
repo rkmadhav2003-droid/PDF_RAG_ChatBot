@@ -38,11 +38,11 @@ def splitting_chunks(docs):
     return chunks
 
 #Storing to Chroma DB
-def store_chroma(chunks):
+def store_chroma(chunks,persistant_directory):
     embedding_model = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
-    persistant_directory = "db/vectore"
+    
 
     db = Chroma.from_documents(
         documents=chunks,
@@ -55,16 +55,5 @@ def store_chroma(chunks):
     print(f"Vector store created and saved tp {persistant_directory}")
     return db
     
-    
-def main():
-    
-    doc_path = r"D:\Projects\RAG_Project\doc\MADHAV R KRISHNAN_Resume.pdf"
-    document = load_doc(doc_path)
-    chunks = splitting_chunks(document)
-    vector_store = store_chroma(chunks)
-    
-    
-if __name__ == "__main__":
-    main()
 
 
